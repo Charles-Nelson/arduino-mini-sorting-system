@@ -10,32 +10,21 @@ The sorter uses a state-machine approach so that each physical part is handled o
 
 ```mermaid
 stateDiagram-v2
-    [*] --> INIT
 
-    INIT --> IDLE : System ready
+    [*] --> IDLE
 
-    IDLE --> READ_SENSOR : Part detected
+    IDLE --> WAIT_FOR_PART : START_PB pressed. System running
+    WAIT_FOR_PART --> READ_PART : Part detected
 
-    READ_SENSOR --> CLASSIFY_PART : Sensor value captured
+    READ_PART --> COUNT_ACCEPT : Accepted part
+    READ_PART --> DIVERT_REJECT : Rejected part
 
-    CLASSIFY_PART --> SORT_BLACK : Value in black threshold range
-    CLASSIFY_PART --> SORT_WHITE : Value in white threshold range
-    CLASSIFY_PART --> NO_PART : Value in empty/no-part range
-    CLASSIFY_PART --> ERROR : Value outside expected ranges
+    DIVERT_REJECT --> COUNT_REJECT : Diverter moved
+    COUNT_REJECT --> RETURN_HOME : Reject count updated
+    RETURN_HOME --> WAIT_PART_CLEAR : Diverter home
 
-    SORT_BLACK --> MOVE_DIVERTER_BLACK : Command servo to black position
-    SORT_WHITE --> MOVE_DIVERTER_WHITE : Command servo to white position
-
-    MOVE_DIVERTER_BLACK --> COUNT_BLACK : Part routed
-    MOVE_DIVERTER_WHITE --> COUNT_WHITE : Part routed
-
-    COUNT_BLACK --> WAIT_CLEAR : Black count updated
-    COUNT_WHITE --> WAIT_CLEAR : White count updated
-    NO_PART --> IDLE : No valid part detected
-
-    WAIT_CLEAR --> IDLE : Sensor returns to empty state
-
-    ERROR --> IDLE : Error logged / ignored
+    COUNT_ACCEPT --> WAIT_PART_CLEAR : Accept count updated
+    WAIT_PART_CLEAR --> WAIT_FOR_PART : Sensor clear
 ```
 
 ---
@@ -44,17 +33,17 @@ stateDiagram-v2
 
 | State | Purpose |
 |---|---|
-| `INIT` | Initializes LCD, servo position, counters, and sensor settings. |
+| `IDLE` | Initializes LCD, servo position, counters, and sensor settings. |
 | `IDLE` | Waits for a part to enter the sensor area. |
-| `READ_SENSOR` | Reads the reflectivity sensor value. |
-| `CLASSIFY_PART` | Compares sensor value against threshold ranges. |
-| `SORT_BLACK` | Begins logic for routing a black part. |
-| `SORT_WHITE` | Begins logic for routing a white part. |
-| `MOVE_DIVERTER_BLACK` | Moves the servo/diverter to the black-part path. |
+| `WAIT_FOR_PART` | Reads the reflectivity sensor value. |
+| `READ_PART` | Compares sensor value against threshold ranges. |
+
+| `DIVERT_REJECT` | Begins logic for routing a white part. |
+| `RETURN_HOME` | Moves the servo/diverter to the black-part path. |
 | `MOVE_DIVERTER_WHITE` | Moves the servo/diverter to the white-part path. |
-| `COUNT_BLACK` | Increments the black-part counter. |
-| `COUNT_WHITE` | Increments the white-part counter. |
-| `WAIT_CLEAR` | Waits until the sensor area is clear before accepting another part. |
+| `COUNT_ACCEPT` | Increments the black-part counter. |
+| `COUNT_REJECT` | Increments the white-part counter. |
+| `WAIT_PART_CLEAR` | Waits until the sensor area is clear before accepting another part. |
 | `NO_PART` | Handles readings that indicate no part is present. |
 | `ERROR` | Handles readings outside expected threshold ranges. |
 

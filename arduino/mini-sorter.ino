@@ -26,7 +26,7 @@ Servo diverterServo;
 
 // Servo positions - adjust after physical testing
 const int SERVO_HOME_ANGLE   = 90;    // Default path to Bin 1 (accepted)
-const int SERVO_REJECT_ANGLE = 190;   // Divert white chip to Bin 2 (rejected)
+const int SERVO_REJECT_ANGLE = 180;   // Divert white chip to Bin 2 (rejected)
 
 // ---------------- SENSOR THRESHOLDS ----------------
 // reading < EMPTY_THRESHOLD  -> no chip / empty tunnel
@@ -44,7 +44,7 @@ const unsigned long SENSOR_SETTLE_MS     = 10;    // Small delay after chip ente
 const unsigned long LCD_UPDATE_MS        = 200;   // display refresh
 
 // ---------------- COUNTERS ----------------
-long acceptedCount = -1;
+unsigned long acceptedCount = 0;
 unsigned long rejectedCount = 0;
 
 // ---------------- SENSOR VARIABLES ----------------

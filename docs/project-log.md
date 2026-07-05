@@ -24,5 +24,24 @@ arduino-mini-sorting-system/
 ├── videos/
 ├── README.md
 └── .gitignore
+```
+## July 5, 2026
 
-#### July 6, 2026
+### Milestone 2: Arduino Code Setup
+
+- Began preparing the Arduino sketch for the mini sorting system.
+- Planned to move development into VS Code and commit by milestone.
+```
+```
+
+## July 6, 2026
+
+### Milestone 3: Update Images, Video, Wiring Notes, README
+
+Added the following files and replaced the README with updated version.
+
+```
+Video.avi
+Image.jpeg
+Wiring notes.md
+```
